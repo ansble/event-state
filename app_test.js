@@ -1,22 +1,22 @@
 var assert = require('chai').assert
 	, Events = require('events').EventEmitter
 	, emitter = new Events()
-	, appInit = require('./app')
-	, app = require('./app')(emitter);
+	, app = require('./app');
 
 describe('The Main Tests for event-state', function () {
-	it('should return a function', function () {
-		assert.isFunction(appInit);
+	before(function () {
+		emitter.required = app;
 	});
 
-	it('should export a function when it is initialized', function () {
+	it('should return a function', function () {
 		assert.isFunction(app);
+		assert.isFunction(emitter.required);
 	});
 
 	describe('Events should trigger the state machine', function () {
 		it('callback should receive an array', function (done) {
 			
-			app(['test-event', 'test-event-2'], function (dataArray) {
+			emitter.required(['test-event', 'test-event-2'], function (dataArray) {
 				assert.isArray(dataArray);
 				assert.strictEqual(dataArray.length, 2);
 				done();

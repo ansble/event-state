@@ -1,6 +1,6 @@
-var eventObject
-	, required = function (eventsArrayIn, callback, scope) {
-		var stateObj = {}
+var required = function (eventsArrayIn, callback, scope) {
+		var that = this
+			, stateObj = {}
 			, scope = scope || {}
 			, eventData = []
 			, called = false
@@ -30,12 +30,9 @@ var eventObject
 
 		eventsArrayIn.forEach(function (event) {
 			stateObj[event] = false;
-			eventObject.on(event, updateState(event));
+
+			that.on(event, updateState(event));
 		});
 	};
 
-module.exports = function (eventObjectIn) {
-	eventObject = eventObjectIn;
-
-	return required;
-};
+module.exports = required;
