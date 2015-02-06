@@ -3,11 +3,14 @@ var eventObject
 		var stateObj = {}
 			, scope = scope || {}
 			, eventData = []
+			, called = false
 			
-			, updateState = function (eventName) {
+			, updateState = function (eventName) {				
 				return function (data) {
 					stateObj[eventName] = data;
 					eventData.push(data);
+
+					stateCheck();
 				};
 			}
 
@@ -15,20 +18,19 @@ var eventObject
 				var ready = true;
 
 				Object.keys(stateObj).forEach(function (event) {
-					ready = ready && (typeof stateObj[event] !== 'undefined');
+					ready = ready && (stateObj[event] !== false);
 				});
 
-				if(ready){
-					callback.apply(scope, eventData);
+				if(ready && !called){
+					called = true;
+
+					callback.apply(scope, [eventData]);
 				}
 			};
 
 		eventsArrayIn.forEach(function (event) {
 			stateObj[event] = false;
-
 			eventObject.on(event, updateState(event));
-
-			stateCheck();
 		});
 	};
 
