@@ -1,0 +1,41 @@
+{
+  "name": "event-state",
+  "version": "1.0.0",
+  "description": "simple event based state machine for js, written mostly for monument and action",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "gulp test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/designfrontier/monumentjs"
+  },
+  "bugs": {
+    "url": "https://github.com/designfrontier/monumentjs/issues"
+  },
+  "author": "Daniel Sellers <daniel@designfrontier.net>",
+  "license": "MIT",
+  "keywords": [
+    "nodejs",
+    "events",
+    "routing",
+    "isomorphic",
+    "browser",
+    "event",
+    "eda"
+  ],
+  "dependencies": {
+    "dot": "^1.0.3",
+    "media-typer": "^0.3.0",
+    "mime": "^1.2.11",
+    "raw-body": "^1.3.2"
+  },
+  "devDependencies": {
+    "chai": "^1.10.0",
+    "chalk": "^0.5.1",
+    "gulp": "^3.8.10",
+    "gulp-mocha": "^2.0.0",
+    "minimist": "^1.1.0"
+  }
+}
