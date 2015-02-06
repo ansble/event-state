@@ -12,5 +12,14 @@ describe('The Main Tests for event-state', function () {
 		assert.isFunction(app);
 	});
 
-	// describe('Events should trigger the state machine')
+	describe('Events should trigger the state machine', function () {
+		it('callback should receive an array', function () {
+			app(['test-event', 'test-event-2'], function (dataArray) {
+				assert.isArray(dataArray);
+			});
+
+			Events.emit('test-event', {'test': true});
+			Events.emit('test-event-2', {'test': true});
+		});
+	});
 });

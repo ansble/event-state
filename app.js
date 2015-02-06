@@ -2,10 +2,12 @@ var eventObject
 	, required = function (eventsArrayIn, callback, scope) {
 		var stateObj = {}
 			, scope = scope || {}
+			, eventData = []
 			
 			, updateState = function (eventName) {
 				return function (data) {
 					stateObj[eventName] = data;
+					eventData.push(data);
 				};
 			}
 
