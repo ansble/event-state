@@ -37,6 +37,10 @@ gulp.task('test', function(){
 			.pipe(mocha({reporter: 'spec'}));
 });
 
+gulp.task('dev', function () {
+	gulp.watch(['**/*_test.js', '**/*.js', '!node_modules/**/*'], ['test']);
+});
+
 gulp.task('release', ['test'], function(){
 	var newVersion = incrementVersion(pkg.version, options.type);
 	//this is the task to automat most of the release stuff... because it is lame and boring
