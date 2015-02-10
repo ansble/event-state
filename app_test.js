@@ -38,5 +38,26 @@ describe('The Main Tests for event-state', function () {
 			emitter.emit('test-event', 'test-event');
 			emitter.emit('test-event-2', 'test-event-2');
 		});
+
+		it('multiple groups of events should trigger nicely and independently', function (done) {
+			
+			emitter.required(['test-event', 'test-event-2'], function (dataArray) {
+				assert.isArray(dataArray);
+				assert.strictEqual('test-event', dataArray[0]);
+				assert.strictEqual('test-event-2', dataArray[1]);
+				
+				emitter.emit('test-event-3', 'test-event-3');
+			});
+
+			emitter.required(['test-event', 'test-event-3'], function (dataArray) {
+				assert.isArray(dataArray);
+				assert.strictEqual('test-event', dataArray[0]);
+				assert.strictEqual('test-event-3', dataArray[1]);
+				done();
+			});
+
+			emitter.emit('test-event', 'test-event');
+			emitter.emit('test-event-2', 'test-event-2');
+		});
 	});
 });
