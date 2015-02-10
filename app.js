@@ -1,15 +1,13 @@
-var eventObject
-	, required = function (eventsArrayIn, callback, scope) {
-		var stateObj = {}
+var required = function (eventsArrayIn, callback, scope) {
+		var that = this
 			, scope = scope || {}
 			, eventData = []
 			, called = false
 			
 			, updateState = function (eventName) {				
 				return function (data) {
-					stateObj[eventName] = data;
-					eventData.push(data);
-
+					
+					eventData[eventsArrayIn.indexOf(eventName)] = data;
 					stateCheck();
 				};
 			}
@@ -17,25 +15,19 @@ var eventObject
 			, stateCheck = function () {
 				var ready = true;
 
-				Object.keys(stateObj).forEach(function (event) {
-					ready = ready && (stateObj[event] !== false);
+				eventsArrayIn.forEach(function (event) {
+					ready = ready && (typeof eventData[eventsArrayIn.indexOf(event)] !== 'undefined');
 				});
 
 				if(ready && !called){
 					called = true;
-
 					callback.apply(scope, [eventData]);
 				}
 			};
 
 		eventsArrayIn.forEach(function (event) {
-			stateObj[event] = false;
-			eventObject.on(event, updateState(event));
+			that.once(event, updateState(event));
 		});
 	};
 
-module.exports = function (eventObjectIn) {
-	eventObject = eventObjectIn;
-
-	return required;
-};
+module.exports = required;
