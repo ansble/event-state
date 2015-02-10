@@ -25,5 +25,18 @@ describe('The Main Tests for event-state', function () {
 			emitter.emit('test-event', {'test': true});
 			emitter.emit('test-event-2', {'test': '1'});
 		});
+
+		it('callback array should be ordered in the same order as events', function (done) {
+			
+			emitter.required(['test-event', 'test-event-2'], function (dataArray) {
+				assert.isArray(dataArray);
+				assert.strictEqual('test-event', dataArray[0]);
+				assert.strictEqual('test-event-2', dataArray[1]);
+				done();
+			});
+
+			emitter.emit('test-event', 'test-event');
+			emitter.emit('test-event-2', 'test-event-2');
+		});
 	});
 });
