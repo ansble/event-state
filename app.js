@@ -3,10 +3,10 @@ var required = function (eventsArrayIn, callback, scope) {
 			, scope = scope || {}
 			, eventData = []
 			, called = false
+			, listen = that.once || that.one || that.on //use once if available, one, if available, and lastly on if available.
 			
 			, updateState = function (eventName) {				
 				return function (data) {
-					
 					eventData[eventsArrayIn.indexOf(eventName)] = data;
 					stateCheck();
 				};
@@ -14,7 +14,7 @@ var required = function (eventsArrayIn, callback, scope) {
 
 			, stateCheck = function () {
 				var ready = true;
-
+				
 				eventsArrayIn.forEach(function (event) {
 					ready = ready && (typeof eventData[eventsArrayIn.indexOf(event)] !== 'undefined');
 				});
@@ -26,7 +26,7 @@ var required = function (eventsArrayIn, callback, scope) {
 			};
 
 		eventsArrayIn.forEach(function (event) {
-			that.once(event, updateState(event));
+			listen.apply(that, [event, updateState(event)]);
 		});
 	};
 
