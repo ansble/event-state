@@ -4,8 +4,8 @@ var required = function (eventsArrayIn, callback, scope) {
 			, eventData = []
 			, called = false
 			, listen = that.once || that.one || that.on //use once if available, one, if available, and lastly on if available.
-			
-			, updateState = function (eventName) {				
+
+			, updateState = function (eventName) {
 				return function (data) {
 					eventData[eventsArrayIn.indexOf(eventName)] = data;
 					stateCheck();
