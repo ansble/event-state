@@ -1,6 +1,12 @@
-var required = function (eventsArrayIn, callback, scope) {
+//TODO: use .off when .on is used to register
+//TODO: add comments
+//TODO: API for clearing this required
+
+var required = function (eventsArrayIn, callback, scopeIn, multiple) {
+		'use strict';
+
 		var that = this
-			, scope = scope || {}
+			, scope = scopeIn || {}
 			, eventData = []
 			, called = false
 			, listen = that.once || that.one || that.on //use once if available, one, if available, and lastly on if available.
@@ -20,7 +26,10 @@ var required = function (eventsArrayIn, callback, scope) {
 				});
 
 				if(ready && !called){
-					called = true;
+					if(!multiple){
+						called = true;
+					}
+
 					callback.apply(scope, [eventData]);
 				}
 			};
