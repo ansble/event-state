@@ -1,6 +1,5 @@
 //TODO: use .off when .on is used to register
 //TODO: add comments
-//TODO: API for clearing this required
 
 var required = function (eventsArrayIn, callback, scopeIn, multiple) {
 		'use strict';
@@ -8,8 +7,19 @@ var required = function (eventsArrayIn, callback, scopeIn, multiple) {
 		var that = this
 			, scope = scopeIn || {}
 			, eventData = []
+			, updateData = []
 			, called = false
 			, listen = that.once || that.one || that.on //use once if available, one, if available, and lastly on if available.
+			, silence = that.off || that.removeListener
+			, isOn = (listen === that.on)
+
+			, clear = function () {
+				eventsArrayIn.forEach(function (event) {
+					silence.apply(that,[event, updateData[eventsArrayIn.indexOf(event)]]);
+				});
+
+				eventData = undefined;
+			}
 
 			, updateState = function (eventName) {
 				return function (data) {
@@ -26,17 +36,30 @@ var required = function (eventsArrayIn, callback, scopeIn, multiple) {
 				});
 
 				if(ready && !called){
+					callback.apply(scope, [eventData]);
+
 					if(!multiple){
 						called = true;
+						
+						if(isOn){
+							clear();
+						}
 					}
-
-					callback.apply(scope, [eventData]);
 				}
 			};
 
+		if(multiple){
+			listen = that.on;
+		}
+
 		eventsArrayIn.forEach(function (event) {
-			listen.apply(that, [event, updateState(event)]);
+			var index = eventsArrayIn.indexOf(event);
+			updateData[index] = updateState(event);
+			listen.apply(that, [event, updateData[index]]);
 		});
+
+		//returns a function that clears the event listeners
+		return {cancel: clear};
 	};
 
 module.exports = required;
