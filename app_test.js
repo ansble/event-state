@@ -62,7 +62,24 @@ describe('The Main Tests for event-state', function () {
 			emitter.emit('test-event-2', 'test-event-2');
 		});
 
-		it('should allow for multiple triggers of the same state');
+		it('should allow for multiple triggers of the same state', function(done){
+			var i = false;
+
+			emitter.required(['test', 'test-2'], function () {
+				if(i){
+					assert.strictEqual(i, true);
+					done();
+				} else {
+					assert.strictEqual(false, i);
+					i = true;
+				}
+			}, {}, true);
+
+			emitter.emit('test', 'test-event');
+			emitter.emit('test-2', 'test-event-2');
+
+			emitter.emit('test-2', 'test-event-2');
+		});
 		it('should unbind listeners if not multiple flagged and using .on');
 	});
 
