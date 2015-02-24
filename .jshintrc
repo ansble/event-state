@@ -14,5 +14,11 @@
   "undef": true,
   "unused": true,
   "strict": true,
-  "laxcomma": true
+  "laxcomma": true,
+  "predef": [
+    "beforeEach"
+    , "it"
+    , "describe"
+    , "chai"
+  ]
 }
