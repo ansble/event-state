@@ -18,3 +18,5 @@ Very simple and concise. Takes an array of events, and when all the events have 
 `scope` is the scope that will be applied to the callback function.
 
 `required` needs to be attached to an event emitter that has an `on`, `one` or `once` function that listens to events. It uses one of them (once > one > on) to do it's listening. `on` is less then ideal and most likely will cause a memory leak of some sort.
+
+`required` returns a funciton that cancels it.
