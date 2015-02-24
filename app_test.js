@@ -4,6 +4,8 @@ var assert = require('chai').assert
 	, app = require('./app');
 
 describe('The Main Tests for event-state', function () {
+	'use strict';
+
 	before(function () {
 		emitter.required = app;
 	});
@@ -53,6 +55,56 @@ describe('The Main Tests for event-state', function () {
 				assert.isArray(dataArray);
 				assert.strictEqual('test-event', dataArray[0]);
 				assert.strictEqual('test-event-3', dataArray[1]);
+				done();
+			});
+
+			emitter.emit('test-event', 'test-event');
+			emitter.emit('test-event-2', 'test-event-2');
+		});
+
+		it('should allow for multiple triggers of the same state', function(done){
+			var i = false;
+
+			emitter.required(['test', 'test-2'], function () {
+				if(i){
+					assert.strictEqual(i, true);
+					done();
+				} else {
+					assert.strictEqual(false, i);
+					i = true;
+				}
+			}, {}, true);
+
+			emitter.emit('test', 'test-event');
+			emitter.emit('test-2', 'test-event-2');
+
+			emitter.emit('test-2', 'test-event-2');
+		});
+		it('should unbind listeners if not multiple flagged and using .on');
+	});
+
+	describe('required state should be cancelable', function(){
+		it('should return an object with a cancel function that cancels the required', function () {
+			var test = true
+				, requiredEvent = emitter.required(['test-event', 'test-event-2'], function () {
+					test = false;
+				});
+
+			assert.isObject(requiredEvent);
+			assert.isFunction(requiredEvent.cancel);
+		});
+
+		it('should cancel the callback if called', function (done) {
+			var test = true
+				, requiredEvent = emitter.required(['test-event', 'test-event-2'], function () {
+					test = false;
+				});
+
+			//cancel the event
+			requiredEvent.cancel();
+
+			emitter.on('test-event-2', function () {
+				assert.strictEqual(true, test);
 				done();
 			});
 
