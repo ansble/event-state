@@ -1,3 +1,8 @@
+### - 0.2.4 *2/24/2015, 2:41:00 PM*
+
+  - tweaked the readme with a note about canceling
+
+
 ### - 0.2.3 *2/24/2015, 2:39:03 PM*
 
   - Merge pull request #9 from ansble/feature/cancel
