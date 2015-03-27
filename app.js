@@ -55,6 +55,12 @@ var required = function (eventsArrayIn, callback, scopeIn, multiple) {
 						}
 					}
 				}
+			}
+
+			, addState = function (event) {
+				var index = eventsArrayIn.indexOf(event);
+				updateData[index] = updateState(event);
+				listen.apply(that, [event, updateData[index]]);
 			};
 
 		if(multiple){ //if it is supposed to trigger muliple times then we need to use .on not .once or .one
@@ -63,13 +69,11 @@ var required = function (eventsArrayIn, callback, scopeIn, multiple) {
 
 		//setup the listeners for each event
 		eventsArrayIn.forEach(function (event) {
-			var index = eventsArrayIn.indexOf(event);
-			updateData[index] = updateState(event);
-			listen.apply(that, [event, updateData[index]]);
+			addState(event);
 		});
 
 		//returns a function that clears the event listeners
-		return {cancel: clear};
+		return {cancel: clear, add: addState};
 	};
 
 module.exports = required;
