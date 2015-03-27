@@ -5,6 +5,7 @@ var required = function (eventsArrayIn, callback, scopeIn, multiple) {
 
 		var that = this
 			, scope = scopeIn || {}
+			, eventArray = eventsArrayIn
 			, eventData = []
 			, updateData = []
 			, called = false
@@ -15,8 +16,8 @@ var required = function (eventsArrayIn, callback, scopeIn, multiple) {
 			, clear = function () {
 				//this function silences listeners once they are not needed anymore
 
-				eventsArrayIn.forEach(function (event) {
-					silence.apply(that,[event, updateData[eventsArrayIn.indexOf(event)]]);
+				eventArray.forEach(function (event) {
+					silence.apply(that,[event, updateData[eventArray.indexOf(event)]]);
 				});
 
 				eventData = undefined;
@@ -25,7 +26,7 @@ var required = function (eventsArrayIn, callback, scopeIn, multiple) {
 			, updateState = function (eventName) {
 				// this function handles updating the whether or not an event has been triggered
 				//	it returns a function that holds onto the eventName in closure scope
-				var index = eventsArrayIn.indexOf(eventName);
+				var index = eventArray.indexOf(eventName);
 
 				return function (data) {
 					eventData[index] = data; //update the data array
@@ -37,8 +38,8 @@ var required = function (eventsArrayIn, callback, scopeIn, multiple) {
 				//the state check function... it checks to see if all the events have triggered
 				var ready = true;
 				
-				eventsArrayIn.forEach(function (event) {
-					ready = ready && (typeof eventData[eventsArrayIn.indexOf(event)] !== 'undefined');
+				eventArray.forEach(function (event) {
+					ready = ready && (typeof eventData[eventArray.indexOf(event)] !== 'undefined');
 				});
 
 				if(ready && !called){ //have all events triggered? and has the callback been called before?
@@ -55,6 +56,17 @@ var required = function (eventsArrayIn, callback, scopeIn, multiple) {
 						}
 					}
 				}
+			}
+
+			, addState = function (event) {
+				var index = eventArray.indexOf(event);
+				if(index === -1){
+					eventArray.push(event);
+					index = eventArray.length - 1;
+				}
+
+				updateData[index] = updateState(event);
+				listen.apply(that, [event, updateData[index]]);
 			};
 
 		if(multiple){ //if it is supposed to trigger muliple times then we need to use .on not .once or .one
@@ -62,14 +74,12 @@ var required = function (eventsArrayIn, callback, scopeIn, multiple) {
 		}
 
 		//setup the listeners for each event
-		eventsArrayIn.forEach(function (event) {
-			var index = eventsArrayIn.indexOf(event);
-			updateData[index] = updateState(event);
-			listen.apply(that, [event, updateData[index]]);
+		eventArray.forEach(function (event) {
+			addState(event);
 		});
 
 		//returns a function that clears the event listeners
-		return {cancel: clear};
+		return {cancel: clear, add: addState};
 	};
 
 module.exports = required;

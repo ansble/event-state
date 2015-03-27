@@ -111,5 +111,28 @@ describe('The Main Tests for event-state', function () {
 			emitter.emit('test-event', 'test-event');
 			emitter.emit('test-event-2', 'test-event-2');
 		});
+
+		it('should return an object with an add function that adds states to watch for', function () {
+			var test = true
+				, requiredEvent = emitter.required(['test-event', 'test-event-2'], function () {
+					test = false;
+				});
+
+			assert.isObject(requiredEvent);
+			assert.isFunction(requiredEvent.add);
+		});
+
+		it('should add additional functions when add is called', function (done) {
+			var requiredEvent = emitter.required(['test-event-4', 'test-event-5'], function (arr) {
+					assert.strictEqual(3, arr.length);
+					done();
+				});
+
+			//cancel the event		
+			emitter.emit('test-event-4', 'test-event');
+			requiredEvent.add('test-event-6');
+			emitter.emit('test-event-5', 'test-event-2');
+			emitter.emit('test-event-6', 'test-event-6');
+		});
 	});
 });
