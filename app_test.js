@@ -17,7 +17,7 @@ describe('The Main Tests for event-state', function () {
 
 	describe('Events should trigger the state machine', function () {
 		it('callback should receive an array', function (done) {
-			
+
 			emitter.required(['test-event', 'test-event-2'], function (dataArray) {
 				assert.isArray(dataArray);
 				assert.strictEqual(dataArray.length, 2);
@@ -29,7 +29,7 @@ describe('The Main Tests for event-state', function () {
 		});
 
 		it('callback array should be ordered in the same order as events', function (done) {
-			
+
 			emitter.required(['test-event', 'test-event-2'], function (dataArray) {
 				assert.isArray(dataArray);
 				assert.strictEqual('test-event', dataArray[0]);
@@ -42,12 +42,12 @@ describe('The Main Tests for event-state', function () {
 		});
 
 		it('multiple groups of events should trigger nicely and independently', function (done) {
-			
+
 			emitter.required(['test-event', 'test-event-2'], function (dataArray) {
 				assert.isArray(dataArray);
 				assert.strictEqual('test-event', dataArray[0]);
 				assert.strictEqual('test-event-2', dataArray[1]);
-				
+
 				emitter.emit('test-event-3', 'test-event-3');
 			});
 
@@ -122,17 +122,19 @@ describe('The Main Tests for event-state', function () {
 			assert.isFunction(requiredEvent.add);
 		});
 
-		it('should add additional functions when add is called', function (done) {
+		it('should add additional functions when add is called with one or more events', function (done) {
 			var requiredEvent = emitter.required(['test-event-4', 'test-event-5'], function (arr) {
-					assert.strictEqual(3, arr.length);
+					assert.strictEqual(4, arr.length);
 					done();
 				});
 
-			//cancel the event		
+			//cancel the event
 			emitter.emit('test-event-4', 'test-event');
 			requiredEvent.add('test-event-6');
 			emitter.emit('test-event-5', 'test-event-2');
+			requiredEvent.add('test-event-6', 'test-event-7');
 			emitter.emit('test-event-6', 'test-event-6');
+			emitter.emit('test-event-7', 'test-event-7');
 		});
 	});
 });
