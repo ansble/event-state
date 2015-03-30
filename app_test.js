@@ -124,7 +124,7 @@ describe('The Main Tests for event-state', function () {
 
 		it('should add additional functions when add is called with one or more events', function (done) {
 			var requiredEvent = emitter.required(['test-event-4', 'test-event-5'], function (arr) {
-					assert.strictEqual(4, arr.length);
+					assert.strictEqual(6, arr.length);
 					done();
 				});
 
@@ -133,8 +133,11 @@ describe('The Main Tests for event-state', function () {
 			requiredEvent.add('test-event-6');
 			emitter.emit('test-event-5', 'test-event-2');
 			requiredEvent.add('test-event-6', 'test-event-7');
+			requiredEvent.add(['test-event-8', 'test-event-9']);
 			emitter.emit('test-event-6', 'test-event-6');
 			emitter.emit('test-event-7', 'test-event-7');
+			emitter.emit('test-event-8', 'test-event-8');
+			emitter.emit('test-event-9', 'test-event-9');
 		});
 	});
 });
