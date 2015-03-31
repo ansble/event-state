@@ -1,3 +1,8 @@
+### - 0.3.3 *3/31/2015, 6:57:27 AM*
+
+  - adding badges
+
+
 ### - 0.3.2 *3/31/2015, 6:51:57 AM*
 
   - Merge pull request #11 from uniqname/master
