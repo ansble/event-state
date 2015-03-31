@@ -1,6 +1,6 @@
 {
   "name": "event-state",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "simple event based state machine for js, written mostly for monument and action",
   "main": "app.js",
   "scripts": {
