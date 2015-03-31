@@ -1,6 +1,22 @@
 //TODO: use .off when .on is used to register
 
-var required = function (eventsArrayIn, callback, scopeIn, multiple) {
+var flatten = function () {
+		'use strict';
+		var args = [].slice.call(arguments),
+			flat = [],
+			fltn = function (arry) {
+				return arry.reduce(function (flat, item) {
+					if (Array.isArray(item)) {
+						flat.concat(fltn(item));
+					} else {
+						flat.push(item);
+					}
+					return flat;
+				}, flat);
+			};
+		return [].concat(fltn(args));
+	}
+	, required = function (eventsArrayIn, callback, scopeIn, multiple) {
 		'use strict';
 
 		var that = this
@@ -37,7 +53,7 @@ var required = function (eventsArrayIn, callback, scopeIn, multiple) {
 			, stateCheck = function () {
 				//the state check function... it checks to see if all the events have triggered
 				var ready = true;
-				
+
 				eventArray.forEach(function (event) {
 					ready = ready && (typeof eventData[eventArray.indexOf(event)] !== 'undefined');
 				});
@@ -50,7 +66,7 @@ var required = function (eventsArrayIn, callback, scopeIn, multiple) {
 					//	mark called true so we don't call the callback mulitple times
 					if(!multiple){
 						called = true;
-						
+
 						if(isOn){ //if we used .on to bind then unbind the listeners we created
 							clear();
 						}
@@ -58,15 +74,19 @@ var required = function (eventsArrayIn, callback, scopeIn, multiple) {
 				}
 			}
 
-			, addState = function (event) {
-				var index = eventArray.indexOf(event);
-				if(index === -1){
-					eventArray.push(event);
-					index = eventArray.length - 1;
-				}
+			, addState = function () {
+				var events = flatten([].slice.call(arguments));
 
-				updateData[index] = updateState(event);
-				listen.apply(that, [event, updateData[index]]);
+				events.forEach(function (event) {
+					var index = eventArray.indexOf(event);
+					if(index === -1){
+						eventArray.push(event);
+						index = eventArray.length - 1;
+					}
+
+					updateData[index] = updateState(event);
+					listen.apply(that, [event, updateData[index]]);
+				});
 			};
 
 		if(multiple){ //if it is supposed to trigger muliple times then we need to use .on not .once or .one
