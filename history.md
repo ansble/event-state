@@ -1,3 +1,10 @@
+### - 0.3.2 *3/31/2015, 6:51:57 AM*
+
+  - Merge pull request #11 from uniqname/master
+  - updated docs
+  - Adds ability to dynamically add multiple events at once to the event state machine
+
+
 ### - 0.2.4 *2/24/2015, 2:41:00 PM*
 
   - tweaked the readme with a note about canceling
