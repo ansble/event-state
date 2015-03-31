@@ -1,6 +1,10 @@
 # event-state
 
 A state machine for events.
+![codeship](https://codeship.com/projects/73c90930-9c53-0132-6219-263ab955f60c/status?branch=master
+)
+![stats](https://nodei.co/npm/event-state.png?downloadRank=true&stars=true)
+
 
 ## API
 
