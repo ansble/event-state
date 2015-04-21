@@ -45,6 +45,10 @@ var flatten = function () {
 				var index = eventArray.indexOf(eventName);
 
 				return function (data) {
+					if(typeof data === 'undefined'){
+						data = true;
+					}
+					
 					eventData[index] = data; //update the data array
 					stateCheck(); //check to see if all the events have triggered
 				};
