@@ -99,7 +99,7 @@ var flatten = function () {
 		});
 
 		//returns a function that clears the event listeners
-		return {cancel: clear, add: addState};
+		return {cancel: clear, add: addState, events: eventArray, status: eventData};
 	};
 
 module.exports = required;
