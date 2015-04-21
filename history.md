@@ -1,3 +1,10 @@
+### - 0.3.5 *4/21/2015, 12:07:32 PM*
+
+  - Merge pull request #12 from ansble/feature/reveal
+  - revealed some internals for user consumption
+  - added the ability to see what events are in a required and what their status is
+
+
 ### - 0.3.4 *3/31/2015, 6:58:54 AM*
 
   - fixing line breaks
