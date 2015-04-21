@@ -45,6 +45,10 @@ var flatten = function () {
 				var index = eventArray.indexOf(eventName);
 
 				return function (data) {
+					if(typeof data === 'undefined'){
+						data = true;
+					}
+					
 					eventData[index] = data; //update the data array
 					stateCheck(); //check to see if all the events have triggered
 				};
@@ -99,7 +103,7 @@ var flatten = function () {
 		});
 
 		//returns a function that clears the event listeners
-		return {cancel: clear, add: addState};
+		return {cancel: clear, add: addState, events: eventArray, status: eventData};
 	};
 
 module.exports = required;
