@@ -1,21 +1,8 @@
-//TODO: use .off when .on is used to register
-
-var flatten = function () {
-		'use strict';
-		var args = [].slice.call(arguments),
-			flat = [],
-			fltn = function (arry) {
-				return arry.reduce(function (flat, item) {
-					if (Array.isArray(item)) {
-						flat.concat(fltn(item));
-					} else {
-						flat.push(item);
-					}
-					return flat;
-				}, flat);
-			};
-		return [].concat(fltn(args));
-	}
+//TODO: break into modules
+//TODO: add more tests
+//TODO: add istanbul
+//TODO: convert to ES6 and add built option for clientside use
+var flatten = require('./components/tools').flatten
 	, required = function (eventsArrayIn, callback, scopeIn, multiple) {
 		'use strict';
 
@@ -25,7 +12,7 @@ var flatten = function () {
 			, eventData = []
 			, updateData = []
 			, called = false
-			, listen = that.once || that.one || that.on //use once if available, one, if available, and lastly on if available.
+			, listen = that.once || that.one || that.on || that.addListener//use once if available, one, if available, and lastly on if available.
 			, silence = that.off || that.removeListener
 			, isOn = (listen === that.on) //are we using .on?
 
@@ -56,11 +43,9 @@ var flatten = function () {
 
 			, stateCheck = function () {
 				//the state check function... it checks to see if all the events have triggered
-				var ready = true;
-
-				eventArray.forEach(function (event) {
-					ready = ready && (typeof eventData[eventArray.indexOf(event)] !== 'undefined');
-				});
+				var ready = eventArray.reduce(function (ready, event) {
+					return ready && (typeof eventData[eventArray.indexOf(event)] !== 'undefined');
+				}, true);
 
 				if(ready && !called){ //have all events triggered? and has the callback been called before?
 					//yep... apply the callback
