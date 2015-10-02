@@ -1,5 +1,4 @@
 //TODO: add more tests
-//TODO: add istanbul
 //TODO: convert to ES6 and add built option for clientside use
 var tools = require('./components/tools')
     , required = function (eventsArrayIn, callback, scopeIn, multiple) {

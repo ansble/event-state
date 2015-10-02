@@ -6,6 +6,7 @@ var gulp = require('gulp')
     , cp = require('child_process')
     , chalk = require('chalk')
     , fs = require('fs')
+    , istanbul = require('gulp-istanbul')
 
     , pkg = require('./package.json')
 
@@ -34,10 +35,27 @@ gulp.task('default', function(){
 
 });
 
-gulp.task('test', function(){
-    return gulp.src(['**/**.test.js', '*.test.js', '!node_modules/**/*'], {read: false})
-            .pipe(mocha({reporter: 'spec'}));
+gulp.task('pre-test', function () {
+  return gulp.src(['**/*.js', '!node_modules/**/*', '!**/*.test.js'])
+    // Covering files
+    .pipe(istanbul())
+    // Force `require` to return covered files
+    .pipe(istanbul.hookRequire());
 });
+
+gulp.task('test', ['pre-test'], function () {
+  return gulp.src(['**/**.test.js', '*.test.js', '!node_modules/**/*'])
+    .pipe(mocha({reporter: 'spec'}))
+    // Creating the reports after tests ran
+    .pipe(istanbul.writeReports())
+    // Enforce a coverage of at least 90%
+    .pipe(istanbul.enforceThresholds({ thresholds: { global: 90 } }));
+});
+
+// gulp.task('test', function(){
+//     return gulp.src(['**/**.test.js', '*.test.js', '!node_modules/**/*'], {read: false})
+//             .pipe(mocha({reporter: 'spec'}));
+// });
 
 gulp.task('dev', function () {
     gulp.watch(['**/*_test.js', '**/*.js', '!node_modules/**/*'], ['test']);
