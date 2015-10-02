@@ -1,3 +1,13 @@
+### - 1.3.5 *10/1/2015, 11:13:49 PM*
+
+  - Merge pull request #13 from ansble/feature/update-and-test
+  - Bumps the required test coverage to 100%
+  - Added tests to wrap up the full test coverage
+  - Updated dev dependencies and added in Istanbul
+  - Breaks out listener selection and some other work
+  - Starts the update
+
+
 ### - 0.3.5 *4/21/2015, 12:07:32 PM*
 
   - Merge pull request #12 from ansble/feature/reveal
